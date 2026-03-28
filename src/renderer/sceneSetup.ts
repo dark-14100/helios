@@ -1,2 +1,19 @@
-// TODO: implement
-export {};
+import * as THREE from 'three'
+
+export interface SceneObjects {
+  scene: THREE.Scene
+  camera: THREE.PerspectiveCamera
+  renderer: THREE.WebGLRenderer
+}
+
+export function initScene(canvas: HTMLCanvasElement): SceneObjects {
+  const scene = new THREE.Scene()
+  const camera = new THREE.PerspectiveCamera(60, canvas.clientWidth / canvas.clientHeight, 0.1, 2000)
+  camera.position.set(0, 60, 120)
+  camera.lookAt(0, 0, 0)
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true })
+  renderer.setSize(canvas.clientWidth, canvas.clientHeight)
+  renderer.setPixelRatio(window.devicePixelRatio)
+  renderer.setClearColor(0x000000)
+  return { scene, camera, renderer }
+}
