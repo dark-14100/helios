@@ -12,7 +12,7 @@ This project is built using:
 - **Zustand** — State management
 - **Three.js** — 3D graphics library
 
-## Current Implementation State (Features 1–3)
+## Current Implementation State (Features 1–4)
 
 At this stage, the project contains the foundational skeleton, the baseline Three.js renderer, and the unified planet data models required for the remaining features:
 - All required dependencies are securely installed and locked.
@@ -22,6 +22,7 @@ At this stage, the project contains the foundational skeleton, the baseline Thre
 - Hooks `useThreeScene` and `useAnimationLoop` tie the React canvas perfectly to the rendering engine with proper resizing handlers and delta-time loops.
 - `App.tsx` leverages the baseline scene hooks and successfully renders a base test loop placeholder.
 - `src/data/planets.ts` exports strictly-typed `PlanetData` and `MoonData` definitions outlining physics constants, scaled distance data algorithms, orbital radii, eccentricity, and texture paths for all 8 planets and their major moons.
+- `src/simulation/keplerEngine.ts` contains the pure-function orbital mechanics mathematical core, using Newton-Raphson approximation to solve for mean/eccentric/true anomalies, enabling precise calculations of an orbit's Cartesian `(x, y, z)` heliocentric coordinates over any elapsed time `t`.
 - The `src/` directory has been bootstrapped with placeholder module and component files covering our renderer components, UI components, store, and simulation logic.
 - A public assets structure (`public/textures/`) has automatically been primed to expect upcoming NASA texture mapping files.
 
@@ -34,7 +35,7 @@ npm install
 npm run dev
 ```
 
-You should see a solid black canvas with a centered white rotating sphere (our current pipeline tester), signifying that the data graphics engine is completely prepared for the physics integration coming in Feature 4: **Kepler Engine**.
+You should see a solid black canvas with a centered white rotating sphere (our current pipeline tester), signifying that the physics data engine is completely prepared to load a glowing central star and background in Feature 5: **Sun + Starfield**.
 
 To verify code integrity, build functionality, and type safety, you can additionally run:
 
