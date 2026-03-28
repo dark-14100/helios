@@ -12,16 +12,17 @@ This project is built using:
 - **Zustand** — State management
 - **Three.js** — 3D graphics library
 
-## Current Implementation State (Feature 1 & 2)
+## Current Implementation State (Features 1–3)
 
-At this stage, the project contains the foundational skeleton and the baseline Three.js renderer required for the remaining features:
+At this stage, the project contains the foundational skeleton, the baseline Three.js renderer, and the unified planet data models required for the remaining features:
 - All required dependencies are securely installed and locked.
 - Configuration is complete across `vite.config.ts`, `tsconfig.json`, `tailwind.config.js`, and `vercel.json`.
 - The entry source files (`index.html`, `main.tsx`, `App.tsx`, and `index.css`) are active.
 - `src/renderer/sceneSetup.ts` handles the creation of the Three.js scene, camera, and renderer.
-- Hooks `useThreeScene` and `useAnimationLoop` are implemented to tie the React canvas to the rendering engine with proper resizing handlers and delta-time loops.
-- `App.tsx` successfully mounts the `<canvas>` dynamically and renders a rotating white Three.js sphere as a fundamental pipeline test.
-- The `src/` directory has been bootstrapped with placeholder module and component files covering our data, renderer components, UI components, store, and simulation logic.
+- Hooks `useThreeScene` and `useAnimationLoop` tie the React canvas perfectly to the rendering engine with proper resizing handlers and delta-time loops.
+- `App.tsx` leverages the baseline scene hooks and successfully renders a base test loop placeholder.
+- `src/data/planets.ts` exports strictly-typed `PlanetData` and `MoonData` definitions outlining physics constants, scaled distance data algorithms, orbital radii, eccentricity, and texture paths for all 8 planets and their major moons.
+- The `src/` directory has been bootstrapped with placeholder module and component files covering our renderer components, UI components, store, and simulation logic.
 - A public assets structure (`public/textures/`) has automatically been primed to expect upcoming NASA texture mapping files.
 
 ## Development
@@ -33,7 +34,7 @@ npm install
 npm run dev
 ```
 
-You should see a solid black canvas with a centered white rotating sphere, signifying that the graphics engine is fully prepared for Feature 3: **Planet & Moon Data**.
+You should see a solid black canvas with a centered white rotating sphere (our current pipeline tester), signifying that the data graphics engine is completely prepared for the physics integration coming in Feature 4: **Kepler Engine**.
 
 To verify code integrity, build functionality, and type safety, you can additionally run:
 

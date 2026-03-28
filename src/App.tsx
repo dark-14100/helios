@@ -2,8 +2,10 @@ import { useRef, useEffect } from 'react'
 import * as THREE from 'three'
 import { useThreeScene } from '@/hooks/useThreeScene'
 import { useAnimationLoop } from '@/hooks/useAnimationLoop'
+import { planets } from '@/data/planets'
 
 export default function App() {
+  console.log('Total planets loaded from data file:', planets.length)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const sceneObjects = useThreeScene(canvasRef)
   const sphereRef = useRef<THREE.Mesh | null>(null)
