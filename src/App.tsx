@@ -6,6 +6,7 @@ import { createSun } from '@/renderer/sunGlow'
 import { createAllPlanetMeshes } from '@/renderer/planetMesh'
 import { planets } from '@/data/planets'
 import { getPlanetPosition } from '@/simulation/keplerEngine'
+import { useSimStore } from '@/store/simStore'
 
 export default function App() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -35,8 +36,24 @@ export default function App() {
     })
   }, [sceneObjects])
 
-  useAnimationLoop(() => {
+  useAnimationLoop((delta) => {
     if (!sceneObjects) return
+    
+    // Command the physics simulation clock to stride forward
+    useSimStore.getState().tick(delta)
+    
+    // Grab the new clock time and update positions for all planetary array meshes
+    const currentDays = useSimStore.getState().elapsedDays
+    planets.forEach((planet) => {
+      const mesh = planetMeshesRef.current.get(planet.name)
+      if (mesh) {
+        const coords = getPlanetPosition(planet, currentDays)
+        mesh.position.set(coords.x, coords.y, coords.z)
+        
+        // Spin the physical body around its own localized Y-axis
+        mesh.rotation.y += delta * 0.2
+      }
+    })
     
     // Gentle Sun Pulse Algorithm
     if (sunRef.current) {

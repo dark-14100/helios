@@ -12,7 +12,7 @@ This project is built using:
 - **Zustand** — State management
 - **Three.js** — 3D graphics library
 
-## Current Implementation State (Features 1–6)
+## Current Implementation State (Features 1–7)
 
 At this stage, the project contains the foundational skeleton, the baseline Three.js renderer, and the unified planet data models required for the remaining features:
 - All required dependencies are securely installed and locked.
@@ -24,6 +24,7 @@ At this stage, the project contains the foundational skeleton, the baseline Thre
 - `src/simulation/keplerEngine.ts` contains the pure-function orbital mechanics mathematical core, using Newton-Raphson approximation to solve for mean/eccentric/true anomalies, enabling precise calculations of an orbit's Cartesian `(x, y, z)` heliocentric coordinates over any elapsed time `t`.
 - `src/renderer/sunGlow.ts` builds the deep space environment, spawning a glowing pulsing central Sun, illuminating the localized space with high-intensity `PointLight` and `AmbientLight`, and rendering a massive 10,000-point 3D background starfield.
 - `src/renderer/planetMesh.ts` acts as the generation factory, processing all the physical planet arrays and rendering 8 properly sized spherical geometries using standard materials. It assigns fallback colors gracefully, integrates translucent custom rings onto Saturn, tilts the axial models logically, and maps everything to standard `THREE.Mesh` maps. All 8 planets are statically loaded onto the screen precisely anchored at `t=0` via the physics engine.
+- `src/store/simStore.ts` safely implements our high-performance simulation clock leveraging Zustand. It safely calculates `elapsedDays` over our delta loop natively independent of rendering bottlenecks, driving the entire continuous active re-calculations of planetary velocities and revolution geometries seamlessly.
 
 ## Development
 
@@ -34,7 +35,7 @@ npm install
 npm run dev
 ```
 
-You should see a vast background starfield, a glowing sun that subtly pulses via trigonometric animation, and a perfect line of 8 beautifully lit planets, signifying that the physical graphics engine is completely prepared for motion physics in Feature 7: **Orbital Animation**.
+You should see a vast background starfield, a glowing sun that subtly pulses via trigonometric animation, and 8 uniquely colored planetary bodies dynamically revolving across the entire plane at their respective physical speeds simulating a continuous live orbit loop. This signifies the rendering environment is entirely prepared to track and visualize spatial trajectory physics in Feature 8: **Orbit Trail Lines**.
 
 To verify code integrity, build functionality, and type safety, you can additionally run:
 
