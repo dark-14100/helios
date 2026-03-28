@@ -39,8 +39,9 @@ export function createSun(scene: THREE.Scene): THREE.Mesh {
   sunCore.add(sunHalo)
   
   // 3. Environment Lighting
-  const sunLight = new THREE.PointLight(0xfff5e0, 3, 1000)
-  const ambientLight = new THREE.AmbientLight(0x111133, 0.5)
+  // Boosted from 3 to 3000 to combat strict physical light decay over 90+ units
+  const sunLight = new THREE.PointLight(0xfff5e0, 3000, 1000, 2)
+  const ambientLight = new THREE.AmbientLight(0x222244, 1.5)
   
   // 4. Starfield
   const starGeo = new THREE.BufferGeometry()

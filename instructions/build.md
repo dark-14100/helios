@@ -1,34 +1,5 @@
 
 
-
-
-
----
-
-## F6 — Planet Meshes + Textures
-
-```
-You are about to implement Feature 6 (Planet Meshes + Textures) of the Helios 3D Solar System Simulator.
-
-You have been provided with:
-- features.md — read the F6 section carefully AND keep the full feature list in mind — the planetMeshes Map and userData you set up here is used directly by F7, F9, F10, and F11
-- f6_prd.md — the full spec for this feature
-- f6_system_prompt.md — your implementation instructions
-
-Before doing anything:
-1. Read all three documents thoroughly
-2. Ask me if I have any concerns or gaps — do not generate any files, code, or output until I respond
-3. After I confirm, propose a numbered phase breakdown for implementing this feature
-4. Wait for my explicit approval of the phases before starting Phase 1
-5. After each phase completes, stop and ask me to confirm before moving to the next
-6. Never proceed to the next phase without my go-ahead
-7. Documentation must be the final phase — do not skip it or merge it with implementation
-
-Do not generate anything yet. Start by asking me about concerns or gaps.
-```
-
----
-
 ## F7 — Orbital Animation
 
 ```
@@ -48,7 +19,7 @@ Before doing anything:
 6. Never proceed to the next phase without my go-ahead
 7. Documentation must be the final phase — do not skip it or merge it with implementation
 
-Do not generate anything yet. Start by asking me about concerns or gaps.
+Do not generate anything yet. Start by asking me about concerns or gaps you have.
 ```
 
 ---
@@ -72,7 +43,7 @@ Before doing anything:
 6. Never proceed to the next phase without my go-ahead
 7. Documentation must be the final phase — do not skip it or merge it with implementation
 
-Do not generate anything yet. Start by asking me about concerns or gaps.
+Do not generate anything yet. Start by asking me about concerns or gaps you have.
 ```
 
 ---
@@ -96,7 +67,7 @@ Before doing anything:
 6. Never proceed to the next phase without my go-ahead
 7. Documentation must be the final phase — do not skip it or merge it with implementation
 
-Do not generate anything yet. Start by asking me about concerns or gaps.
+Do not generate anything yet. Start by asking me about concerns or gaps you have.
 ```
 
 ---
@@ -120,7 +91,7 @@ Before doing anything:
 6. Never proceed to the next phase without my go-ahead
 7. Documentation must be the final phase — do not skip it or merge it with implementation
 
-Do not generate anything yet. Start by asking me about concerns or gaps.
+Do not generate anything yet. Start by asking me about concerns or gaps you have.
 ```
 
 ---
@@ -144,7 +115,7 @@ Before doing anything:
 6. Never proceed to the next phase without my go-ahead
 7. Documentation must be the final phase — do not skip it or merge it with implementation
 
-Do not generate anything yet. Start by asking me about concerns or gaps.
+Do not generate anything yet. Start by asking me about concerns or gaps you have.
 ```
 
 ---
@@ -168,7 +139,7 @@ Before doing anything:
 6. Never proceed to the next phase without my go-ahead
 7. Documentation must be the final phase — do not skip it or merge it with implementation
 
-Do not generate anything yet. Start by asking me about concerns or gaps.
+Do not generate anything yet. Start by asking me about concerns or gaps you have.
 ```
 
 ---
@@ -192,5 +163,5 @@ Before doing anything:
 6. Never proceed to the next phase without my go-ahead
 7. Documentation must be the final phase — update the README with the live URL as the last step
 
-Do not generate anything yet. Start by asking me about concerns or gaps.
+Do not generate anything yet. Start by asking me about concerns or gaps you have.
 ```
