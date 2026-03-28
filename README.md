@@ -12,7 +12,7 @@ This project is built using:
 - **Zustand** — State management
 - **Three.js** — 3D graphics library
 
-## Current Implementation State (Features 1–4)
+## Current Implementation State (Features 1–5)
 
 At this stage, the project contains the foundational skeleton, the baseline Three.js renderer, and the unified planet data models required for the remaining features:
 - All required dependencies are securely installed and locked.
@@ -23,6 +23,7 @@ At this stage, the project contains the foundational skeleton, the baseline Thre
 - `App.tsx` leverages the baseline scene hooks and successfully renders a base test loop placeholder.
 - `src/data/planets.ts` exports strictly-typed `PlanetData` and `MoonData` definitions outlining physics constants, scaled distance data algorithms, orbital radii, eccentricity, and texture paths for all 8 planets and their major moons.
 - `src/simulation/keplerEngine.ts` contains the pure-function orbital mechanics mathematical core, using Newton-Raphson approximation to solve for mean/eccentric/true anomalies, enabling precise calculations of an orbit's Cartesian `(x, y, z)` heliocentric coordinates over any elapsed time `t`.
+- `src/renderer/sunGlow.ts` builds the deep space environment, spawning a glowing pulsing central Sun, illuminating the localized space with high-intensity `PointLight` and `AmbientLight`, and rendering a massive 10,000-point 3D background starfield.
 - The `src/` directory has been bootstrapped with placeholder module and component files covering our renderer components, UI components, store, and simulation logic.
 - A public assets structure (`public/textures/`) has automatically been primed to expect upcoming NASA texture mapping files.
 
@@ -35,7 +36,7 @@ npm install
 npm run dev
 ```
 
-You should see a solid black canvas with a centered white rotating sphere (our current pipeline tester), signifying that the physics data engine is completely prepared to load a glowing central star and background in Feature 5: **Sun + Starfield**.
+You should see a vast background starfield, a glowing sun that subtly pulses via trigonometric animation, and a heavily illuminated test sphere orbiting nearby, signifying that the physical graphics engine is completely prepared to texture all real bodies in Feature 6: **Planet Meshes + Textures**.
 
 To verify code integrity, build functionality, and type safety, you can additionally run:
 
