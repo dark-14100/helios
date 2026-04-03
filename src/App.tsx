@@ -5,6 +5,7 @@ import { useAnimationLoop } from '@/hooks/useAnimationLoop'
 import { createSun } from '@/renderer/sunGlow'
 import { createAllPlanetMeshes, createMoonMeshes } from '@/renderer/planetMesh'
 import { createAllOrbitTrails } from '@/renderer/orbitTrail'
+import { initCameraController } from '@/renderer/cameraController'
 import { planets } from '@/data/planets'
 import { getPlanetPosition } from '@/simulation/keplerEngine'
 import { getMoonPosition } from '@/simulation/moonEngine'
@@ -18,6 +19,7 @@ export default function App() {
   const sunRef = useRef<THREE.Mesh | null>(null)
   const planetMeshesRef = useRef<Map<string, THREE.Mesh>>(new Map())
   const moonMeshesRef = useRef<Map<string, THREE.Mesh>>(new Map())
+  const controllerRef = useRef<ReturnType<typeof initCameraController> | null>(null)
 
   useEffect(() => {
     if (!sceneObjects) return
@@ -48,7 +50,41 @@ export default function App() {
       generatedMoons.forEach((moonMesh, moonName) => localMoonMap.set(moonName, moonMesh))
     })
     moonMeshesRef.current = localMoonMap
+
+    // Feature 10: Initialize advanced raycasting camera target controls
+    controllerRef.current = initCameraController(
+      sceneObjects.camera,
+      sceneObjects.renderer,
+      sceneObjects.scene,
+      meshes,
+      (selectedName) => {
+        useSimStore.getState().setSelectedPlanet(selectedName)
+      }
+    )
+
+    return () => {
+      if (controllerRef.current) {
+        controllerRef.current.dispose()
+      }
+    }
   }, [sceneObjects])
+
+  // Feature 10: Wire deeply into the central store to intercept GUI interactions cleanly
+  useEffect(() => {
+    return useSimStore.subscribe(
+      (state, prevState) => {
+        if (state.selectedPlanet !== prevState.selectedPlanet) {
+          const name = state.selectedPlanet
+          if (name && planetMeshesRef.current) {
+            const mesh = planetMeshesRef.current.get(name)
+            if (mesh) controllerRef.current?.setFocusTarget(mesh)
+          } else {
+            controllerRef.current?.setFocusTarget(null)
+          }
+        }
+      }
+    )
+  }, [])
 
   useAnimationLoop((delta) => {
     if (!sceneObjects) return
@@ -87,6 +123,11 @@ export default function App() {
     if (sunRef.current) {
       const t = performance.now() * 0.001
       sunRef.current.scale.setScalar(1 + Math.sin(t * 0.8) * 0.02)
+    }
+    
+    // Feature 10: Process all tracking lerps securely every frame block
+    if (controllerRef.current) {
+      controllerRef.current.update()
     }
     
     sceneObjects.renderer.render(sceneObjects.scene, sceneObjects.camera)

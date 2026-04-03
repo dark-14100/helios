@@ -12,7 +12,7 @@ This project is built using:
 - **Zustand** — State management
 - **Three.js** — 3D graphics library
 
-## Current Implementation State (Features 1–9)
+## Current Implementation State (Features 1–10)
 
 At this stage, the project contains the foundational skeleton, the baseline Three.js renderer, and the unified planet data models required for the remaining features:
 - All required dependencies are securely installed and locked.
@@ -27,6 +27,7 @@ At this stage, the project contains the foundational skeleton, the baseline Thre
 - `src/store/simStore.ts` safely implements our high-performance simulation clock leveraging Zustand. It safely calculates `elapsedDays` over our delta loop natively independent of rendering bottlenecks, driving the entire continuous active re-calculations of planetary velocities and revolution geometries seamlessly.
 - `src/renderer/orbitTrail.ts` iterates over the `getPlanetPosition` output up to 256 unique fixed point markers tracing orbits spanning massive distances exactly simulating Kepler anomalies, generating static closed `THREE.LineLoop` rendering paths universally.
 - `src/simulation/moonEngine.ts` injects localized 2D trigonometric projections into the core logic loop, capturing physical position data of planetary parents computationally and casting tracking secondary spheres representing complex satellites exactly corresponding to specific orbit radii and periods independently of relative origin drift. 
+- `src/renderer/cameraController.ts` establishes unified 3D mouse interaction wrapping `THREE.Raycaster` against rendering layers. When a user clicks, smooth `lerp` positional vector targeting and `lookAt` overrides naturally decouple them from the root `OrbitControls` loop, pulling the viewpoint perfectly across shifting space coordinates dynamically.
 
 ## Development
 
@@ -37,7 +38,7 @@ npm install
 npm run dev
 ```
 
-You should see a vast background starfield, a glowing sun that subtly pulses via trigonometric animation, 8 uniquely colored planetary bodies dynamically revolving across the entire plane, beautifully glowing static elliptical tracks following their every trajectory, and correctly scaling nested sub-orbiting moons (like Luna, Europa, and Titan) tracing circles relentlessly around their moving parent vectors. This signifies the core environment mechanics are fully complete and primed for User Interface development in Feature 10: **UI Overlays & Interaction**.
+You should see an entirely interactive, massive web-enabled simulator. The background encompasses a sprawling 10,000-point 3D starfield surrounding a glowing sun pulsing via trigonometric animation. 8 beautifully detailed planetary bodies (featuring high specular faceted geometric fallback shaders overlaid with architectural wireframes) and their accurately scaled moons trace perfect orbits continuously. You can now left-click natively to interact with the environment and drag the camera dynamically across space! This signifies the core environment mechanics are fully complete and primed for external HUD logic in Feature 11: **Public API Layer**.
 
 To verify code integrity, build functionality, and type safety, you can additionally run:
 
