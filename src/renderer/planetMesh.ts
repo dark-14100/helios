@@ -24,8 +24,19 @@ export function createPlanetMesh(planet: PlanetData, scene: THREE.Scene): THREE.
     },
     undefined,
     () => {
-      // Fallback: Texture missing, swap material entirely to prevent WebGL black shader bug
-      mesh.material = new THREE.MeshStandardMaterial({ color: planet.color })
+      // Fallback: Texture missing, swap material entirely to a sophisticated low-poly architectural hologram aesthetic
+      mesh.material = new THREE.MeshStandardMaterial({ 
+        color: planet.color, 
+        flatShading: true, 
+        roughness: 0.3,
+        metalness: 0.4
+      })
+
+      // Add a skeletal technical wireframe overlay matching the radius precisely
+      const wireGeo = new THREE.WireframeGeometry(geometry)
+      const wireMat = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.15 })
+      const wireframe = new THREE.LineSegments(wireGeo, wireMat)
+      mesh.add(wireframe)
     }
   )
   
@@ -68,6 +79,47 @@ export function createPlanetMesh(planet: PlanetData, scene: THREE.Scene): THREE.
   scene.add(mesh)
   
   return mesh
+}
+
+export function createMoonMeshes(planet: PlanetData, scene: THREE.Scene): Map<string, THREE.Mesh> {
+  const moonMeshes = new Map<string, THREE.Mesh>()
+  const loader = new THREE.TextureLoader()
+
+  planet.moons.forEach((moon) => {
+    // Generate the spherical moon with low geometry poly-count to keep scene performance sharp
+    const geometry = new THREE.SphereGeometry(moon.radius, 16, 16)
+    const material = new THREE.MeshStandardMaterial({ color: 0xffffff })
+    const mesh = new THREE.Mesh(geometry, material)
+
+    // Link shared texture
+    loader.load(
+      moon.texturePath,
+      (texture) => {
+        material.map = texture
+        material.needsUpdate = true
+      },
+      undefined,
+      () => {
+        // Fallback: Missing moon textures render as sharp faceted low-poly satellites
+        mesh.material = new THREE.MeshStandardMaterial({ 
+          color: 0xaaaaaa, 
+          flatShading: true, 
+          roughness: 0.2,
+          metalness: 0.5
+        })
+        
+        const wireGeo = new THREE.WireframeGeometry(geometry)
+        const wireMat = new THREE.LineBasicMaterial({ color: 0x88ccff, transparent: true, opacity: 0.25 })
+        const wireframe = new THREE.LineSegments(wireGeo, wireMat)
+        mesh.add(wireframe)
+      }
+    )
+
+    scene.add(mesh)
+    moonMeshes.set(moon.name, mesh)
+  })
+
+  return moonMeshes
 }
 
 /**

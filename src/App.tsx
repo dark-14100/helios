@@ -3,10 +3,11 @@ import * as THREE from 'three'
 import { useThreeScene } from '@/hooks/useThreeScene'
 import { useAnimationLoop } from '@/hooks/useAnimationLoop'
 import { createSun } from '@/renderer/sunGlow'
-import { createAllPlanetMeshes } from '@/renderer/planetMesh'
+import { createAllPlanetMeshes, createMoonMeshes } from '@/renderer/planetMesh'
 import { createAllOrbitTrails } from '@/renderer/orbitTrail'
 import { planets } from '@/data/planets'
 import { getPlanetPosition } from '@/simulation/keplerEngine'
+import { getMoonPosition } from '@/simulation/moonEngine'
 import { useSimStore } from '@/store/simStore'
 
 export default function App() {
@@ -16,6 +17,7 @@ export default function App() {
   // Store rendering references internally
   const sunRef = useRef<THREE.Mesh | null>(null)
   const planetMeshesRef = useRef<Map<string, THREE.Mesh>>(new Map())
+  const moonMeshesRef = useRef<Map<string, THREE.Mesh>>(new Map())
 
   useEffect(() => {
     if (!sceneObjects) return
@@ -38,6 +40,14 @@ export default function App() {
     
     // Feature 8: Draw static orbital trails permanently into the space environment
     createAllOrbitTrails(planets, sceneObjects.scene)
+
+    // Feature 9: Init all moon meshes and store them collectively in the active registry
+    const localMoonMap = new Map<string, THREE.Mesh>()
+    planets.forEach((planet) => {
+      const generatedMoons = createMoonMeshes(planet, sceneObjects.scene)
+      generatedMoons.forEach((moonMesh, moonName) => localMoonMap.set(moonName, moonMesh))
+    })
+    moonMeshesRef.current = localMoonMap
   }, [sceneObjects])
 
   useAnimationLoop((delta) => {
@@ -48,14 +58,28 @@ export default function App() {
     
     // Grab the new clock time and update positions for all planetary array meshes
     const currentDays = useSimStore.getState().elapsedDays
+    const isPaused = useSimStore.getState().isPaused
+    
     planets.forEach((planet) => {
       const mesh = planetMeshesRef.current.get(planet.name)
       if (mesh) {
         const coords = getPlanetPosition(planet, currentDays)
         mesh.position.set(coords.x, coords.y, coords.z)
         
-        // Spin the physical body around its own localized Y-axis
-        mesh.rotation.y += delta * 0.2
+        // Halt spin geometry processing intelligently if exactly paused
+        if (!isPaused) {
+          // Spin the physical body around its own localized Y-axis
+          mesh.rotation.y += delta * 0.2
+          
+          // Phase 4: Spin up child satellite loop mapping directly attached tracking coordinates
+          planet.moons.forEach((moon) => {
+            const moonMesh = moonMeshesRef.current.get(moon.name)
+            if (moonMesh) {
+              const moonCoords = getMoonPosition(moon, currentDays, coords)
+              moonMesh.position.set(moonCoords.x, moonCoords.y, moonCoords.z)
+            }
+          })
+        }
       }
     })
     
