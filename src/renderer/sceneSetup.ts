@@ -12,8 +12,9 @@ export function initScene(canvas: HTMLCanvasElement): SceneObjects {
   camera.position.set(0, 60, 120)
   camera.lookAt(0, 0, 0)
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true })
+  // Feature 12: Enforce stringent WebGL pixel ceilings natively protecting thermal outputs on 4K/retina systems
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
   renderer.setSize(canvas.clientWidth, canvas.clientHeight)
-  renderer.setPixelRatio(window.devicePixelRatio)
   renderer.setClearColor(0x000000)
   return { scene, camera, renderer }
 }

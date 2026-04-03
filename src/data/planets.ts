@@ -22,9 +22,22 @@ export interface PlanetData {
   moons: MoonData[]
   hasRings?: boolean
   ringTexturePath?: string
+  nightTexturePath?: string
 }
 
 export const planets: PlanetData[] = [
+  {
+    name: 'Helios',
+    radius: 6.0,
+    semiMajorAxis: 0,
+    eccentricity: 0,
+    orbitalPeriod: 1, // Prevent division by 0
+    axialTilt: 7.25,
+    texturePath: '/textures/sun.jpg', // Missing texture falls back natively
+    color: 0xffd700,
+    moons: [],
+    hasRings: false
+  },
   {
     name: 'Mercury',
     radius: 0.4,
@@ -54,7 +67,8 @@ export const planets: PlanetData[] = [
     eccentricity: 0.017,
     orbitalPeriod: 365.25,
     axialTilt: 23.5,
-    texturePath: '/textures/earth.jpg',
+    texturePath: '/textures/earth_day.jpg',
+    nightTexturePath: '/textures/earth_night.jpg',
     color: 0x4fa3e0,
     moons: [
       {

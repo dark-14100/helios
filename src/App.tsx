@@ -8,10 +8,12 @@ import { createAllOrbitTrails } from '@/renderer/orbitTrail'
 import { initCameraController } from '@/renderer/cameraController'
 import { HUD } from '@/ui/HUD'
 import { Tooltip } from '@/ui/Tooltip'
+import { LandingPage } from '@/ui/LandingPage'
 import { planets } from '@/data/planets'
 import { getPlanetPosition } from '@/simulation/keplerEngine'
 import { getMoonPosition } from '@/simulation/moonEngine'
 import { useSimStore } from '@/store/simStore'
+import { createAsteroidBelt, createShootingStars } from '@/renderer/sceneEffects'
 
 export default function App() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -23,6 +25,25 @@ export default function App() {
   const planetMeshesRef = useRef<Map<string, THREE.Mesh>>(new Map())
   const moonMeshesRef = useRef<Map<string, THREE.Mesh>>(new Map())
   const controllerRef = useRef<ReturnType<typeof initCameraController> | null>(null)
+  const sceneEffectsRef = useRef<any>(null)
+
+  useEffect(() => {
+    THREE.DefaultLoadingManager.onStart = () => {
+      useSimStore.getState().setIsLoading(true)
+    }
+    THREE.DefaultLoadingManager.onProgress = (_, itemsLoaded, itemsTotal) => {
+      useSimStore.getState().setLoadingProgress(itemsLoaded / itemsTotal)
+    }
+    THREE.DefaultLoadingManager.onLoad = () => {
+      useSimStore.getState().setIsLoading(false)
+    }
+    // Fallback if no textures attempt to load
+    setTimeout(() => {
+        if(useSimStore.getState().loadingProgress === 0) {
+            useSimStore.getState().setIsLoading(false)
+        }
+    }, 1500)
+  }, [])
 
   useEffect(() => {
     if (!sceneObjects) return
@@ -31,7 +52,12 @@ export default function App() {
     sunRef.current = createSun(sceneObjects.scene)
 
     // Generate and inject all 8 solid planet bodies with textures + rings
-    const meshes = createAllPlanetMeshes(planets, sceneObjects.scene)
+    const solidPlanets = planets.filter(p => p.name !== 'Helios')
+    const meshes = createAllPlanetMeshes(solidPlanets, sceneObjects.scene)
+    
+    // Inject the sun mesh explicitly so it becomes interactable
+    if (sunRef.current) meshes.set('Helios', sunRef.current)
+    
     planetMeshesRef.current = meshes
 
     // Position each mesh statically natively scaled to its exact Kepler coordinates at t=0
@@ -64,6 +90,14 @@ export default function App() {
         useSimStore.getState().setSelectedPlanet(selectedName)
       }
     )
+
+    // Feature 12: Asteroids and Effects
+    createAsteroidBelt(sceneObjects.scene, 32, 40, 300) // Main belt
+    createAsteroidBelt(sceneObjects.scene, 82, 95, 400) // Kuiper belt analog
+    sceneEffectsRef.current = createShootingStars(sceneObjects.scene)
+    
+    // Feature 12: Performance optimization pixel ratio
+    sceneObjects.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
     return () => {
       if (controllerRef.current) {
@@ -133,6 +167,11 @@ export default function App() {
       controllerRef.current.update()
     }
     
+    // Feature 12: Animate Effects
+    if (sceneEffectsRef.current && !isPaused) {
+      sceneEffectsRef.current.animate(delta)
+    }
+
     // Feature 11: Process exact physical UI projection anchoring translations matching standard 60-FPS loop!
     const activeStatsNode = document.getElementById('stats-panel-anchor')
     if (activeStatsNode) {
@@ -195,10 +234,17 @@ export default function App() {
     return () => window.removeEventListener('mousemove', onMouseMove)
   }, [sceneObjects])
 
+  const hasStarted = useSimStore((s) => s.hasStarted)
+
   return (
     <>
-      <HUD />
-      <Tooltip hoveredPlanet={hoveredPlanet} />
+      <LandingPage />
+      {hasStarted && (
+        <>
+          <HUD />
+          <Tooltip hoveredPlanet={hoveredPlanet} />
+        </>
+      )}
       <canvas ref={canvasRef} className="w-full h-full" />
     </>
   )

@@ -40,8 +40,27 @@ export function createPlanetMesh(planet: PlanetData, scene: THREE.Scene): THREE.
     }
   )
   
+  if (planet.nightTexturePath) {
+    material.emissiveMap = loader.load(planet.nightTexturePath)
+    material.emissive = new THREE.Color(0xffffff)
+    material.emissiveIntensity = 0.8
+  }
+  
   if (planet.hasRings && planet.ringTexturePath) {
-    const ringGeo = new THREE.RingGeometry(planet.radius * 1.4, planet.radius * 2.5, 64)
+    const innerRadius = planet.radius * 1.4
+    const outerRadius = planet.radius * 2.5
+    const ringGeo = new THREE.RingGeometry(innerRadius, outerRadius, 64)
+    
+    // Fix UV mapping for horizontal strip textures (common for planetary rings)
+    const pos = ringGeo.attributes.position
+    const uv = ringGeo.attributes.uv
+    const v3 = new THREE.Vector3()
+    for (let i = 0; i < pos.count; i++) {
+      v3.fromBufferAttribute(pos, i)
+      const radius = v3.length()
+      const normalizedRadius = (radius - innerRadius) / (outerRadius - innerRadius)
+      uv.setXY(i, normalizedRadius, 0.5) // U is mapped across radius
+    }
     const ringMat = new THREE.MeshBasicMaterial({
       color: 0xffffff,
       side: THREE.DoubleSide,
@@ -69,7 +88,8 @@ export function createPlanetMesh(planet: PlanetData, scene: THREE.Scene): THREE.
       }
     )
 
-    ring.rotation.x = Math.PI / 2
+    // A ring in ThreeJS defaults to X/Y plane, but we want X/Z plane to circle the planet equator
+    ring.rotation.x = -Math.PI / 2
     mesh.add(ring)
   }
   

@@ -5,6 +5,12 @@ export interface SimStore {
   simSpeed: number
   isPaused: boolean
   selectedPlanet: string | null
+  hasStarted: boolean
+  isLoading: boolean
+  loadingProgress: number
+  setHasStarted: (s: boolean) => void
+  setIsLoading: (l: boolean) => void
+  setLoadingProgress: (p: number) => void
   setSimSpeed: (s: number) => void
   setIsPaused: (p: boolean) => void
   setSelectedPlanet: (name: string | null) => void
@@ -16,6 +22,12 @@ export const useSimStore = create<SimStore>((set, get) => ({
   simSpeed: 10, // 10 simulation days pass per real-world second
   isPaused: false,
   selectedPlanet: null,
+  hasStarted: false,
+  isLoading: true,
+  loadingProgress: 0,
+  setHasStarted: (s) => set({ hasStarted: s }),
+  setIsLoading: (l) => set({ isLoading: l }),
+  setLoadingProgress: (p) => set({ loadingProgress: p }),
   setSimSpeed: (s) => set({ simSpeed: s }),
   setIsPaused: (p) => set({ isPaused: p }),
   setSelectedPlanet: (name) => set({ selectedPlanet: name }),

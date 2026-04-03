@@ -19,15 +19,46 @@ At this stage, the project contains the foundational skeleton, the baseline Thre
 - Configuration is complete across `vite.config.ts`, `tsconfig.json`, `tailwind.config.js`, and `vercel.json`.
 - The entry source files (`index.html`, `main.tsx`, `App.tsx`, and `index.css`) are active.
 - `src/renderer/sceneSetup.ts` handles the creation of the Three.js scene, camera, and renderer.
-- Hooks `useThreeScene` and `useAnimationLoop` tie the React canvas perfectly to the rendering engine with proper resizing handlers and delta-time loops.
-- `src/data/planets.ts` exports strictly-typed `PlanetData` and `MoonData` definitions outlining physics constants, scaled distance data algorithms, orbital radii, eccentricity, and texture paths for all 8 planets and their major moons.
-- `src/simulation/keplerEngine.ts` contains the pure-function orbital mechanics mathematical core, using Newton-Raphson approximation to solve for mean/eccentric/true anomalies, enabling precise calculations of an orbit's Cartesian `(x, y, z)` heliocentric coordinates over any elapsed time `t`.
-- `src/renderer/sunGlow.ts` builds the deep space environment, spawning a glowing pulsing central Sun, illuminating the localized space with high-intensity `PointLight` and `AmbientLight`, and rendering a massive 10,000-point 3D background starfield.
-- `src/renderer/planetMesh.ts` acts as the generation factory, processing all the physical planet arrays and rendering 8 properly sized spherical geometries using standard materials. It assigns fallback colors gracefully, integrates translucent custom rings onto Saturn, tilts the axial models logically, and maps everything to standard `THREE.Mesh` maps. All 8 planets are statically loaded onto the screen precisely anchored at `t=0` via the physics engine. It also natively hosts the `createMoonMeshes` engine to procedurally instantiate mapped textured spheres representing nested orbital bodies.
-- `src/store/simStore.ts` safely implements our high-performance simulation clock leveraging Zustand. It safely calculates `elapsedDays` over our delta loop natively independent of rendering bottlenecks, driving the entire continuous active re-calculations of planetary velocities and revolution geometries seamlessly.
-- `src/renderer/orbitTrail.ts` iterates over the `getPlanetPosition` output up to 256 unique fixed point markers tracing orbits spanning massive distances exactly simulating Kepler anomalies, generating static closed `THREE.LineLoop` rendering paths universally.
-- `src/simulation/moonEngine.ts` injects localized 2D trigonometric projections into the core logic loop, capturing physical position data of planetary parents computationally and casting tracking secondary spheres representing complex satellites exactly corresponding to specific orbit radii and periods independently of relative origin drift. 
-- `src/renderer/cameraController.ts` establishes unified 3D mouse interaction wrapping `THREE.Raycaster` against rendering layers. When a user clicks, smooth `lerp` positional vector targeting and `lookAt` overrides naturally decouple them from the root `OrbitControls` loop, pulling the viewpoint perfectly across shifting space coordinates dynamically.
+# Helios
+Interactive 3D Solar System Simulator built with React, Three.js, and Vite.
+
+## Features
+- Fully interactive 3D solar system with precise logarithmic sizing
+- Real-time physics processing using Kepler coordinates
+- Orbit trails, dynamic selection halos, and glowing sun aesthetics
+- Embedded satellite support with parent coordinate anchoring
+- Seamless 2D to 3D projection UI architecture
+
+## Quick Start
+```bash
+npm install
+npm run dev
+```
+
+## Downloading Textures (Solarsystemscope)
+To achieve the high fidelity required by this simulation, download standard resolution images from [Solar System Scope Textures](https://www.solarsystemscope.com/textures/).
+Please download and rename the 2k images into `public/textures/` exactly as follows:
+- `sun.jpg`
+- `mercury.jpg`
+- `venus.jpg`
+- `venus_atmosphere.jpg`
+- `earth.jpg`
+- `earth_night.jpg`
+- `moon.jpg`
+- `mars.jpg`
+- `jupiter.jpg`
+- `saturn.jpg`
+- `saturn_ring.png`
+- `uranus.jpg`
+- `neptune.jpg`
+
+*Note: The app will automatically fallback to stylized wireframes using native materials if textures are not available!*
+
+## Deployment
+Helios is ready for standard deployment on platforms like Vercel or Netlify.
+1. Link your GitHub repository.
+2. The platform will automatically detect Vite and run `npm run build`.
+3. Dist output will map directly to `/dist`.
 
 ## Development
 

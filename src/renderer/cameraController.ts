@@ -12,6 +12,9 @@ export function initCameraController(
   const controls = new OrbitControls(camera, renderer.domElement)
   controls.enableDamping = true
   controls.dampingFactor = 0.05
+  // Prevent scrolling beyond the bounds of Neptune/Kuiper belt
+  controls.maxDistance = 300 // F12 zoom threshold limit 
+  controls.minDistance = 3
 
   // Prepare required geometry detection tools
   const raycaster = new THREE.Raycaster()
