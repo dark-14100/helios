@@ -26,20 +26,23 @@ export function initCameraController(
 
     raycaster.setFromCamera(mouse, camera)
 
-    // Ensure we only raycast against our target planets to maximize performance
+    // Ensure we fully traverse down into the models (like checking Saturn's rings or the wireframes)
     const interactableObjects = Array.from(planetMeshes.values())
-    const intersects = raycaster.intersectObjects(interactableObjects)
+    const intersects = raycaster.intersectObjects(interactableObjects, true)
 
     if (intersects.length > 0) {
-      const hitMesh = intersects[0].object as THREE.Mesh
+      let hitNode: THREE.Object3D | null = intersects[0].object
       
-      // Determine exactly which planet the user actually clicked by cross-referencing our Map
+      // Traverse upwards bridging the gap if the raycaster hit a child (like the physical wireframe or structural ring)
       let selectedName: string | null = null
-      for (const [name, mesh] of planetMeshes.entries()) {
-        if (mesh === hitMesh) {
-          selectedName = name
-          break
+      while (hitNode && !selectedName) {
+        for (const [name, planetMesh] of planetMeshes.entries()) {
+          if (planetMesh === hitNode) {
+            selectedName = name
+            break
+          }
         }
+        hitNode = hitNode.parent
       }
       
       // Bubble strictly out to Zustand subscription loop so React layers can react to 3D clicks seamlessly
