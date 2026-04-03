@@ -2,6 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes unfold {
+  0% {
+    clip-path: polygon(0 0, 0 0, 0 100%, 0% 100%);
+    opacity: 0;
+  }
+  100% {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    opacity: 1;
+  }
+}
+
 html, body, #root {
   height: 100%;
   width: 100%;
