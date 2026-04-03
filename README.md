@@ -12,7 +12,7 @@ This project is built using:
 - **Zustand** — State management
 - **Three.js** — 3D graphics library
 
-## Current Implementation State (Features 1–7)
+## Current Implementation State (Features 1–8)
 
 At this stage, the project contains the foundational skeleton, the baseline Three.js renderer, and the unified planet data models required for the remaining features:
 - All required dependencies are securely installed and locked.
@@ -25,6 +25,7 @@ At this stage, the project contains the foundational skeleton, the baseline Thre
 - `src/renderer/sunGlow.ts` builds the deep space environment, spawning a glowing pulsing central Sun, illuminating the localized space with high-intensity `PointLight` and `AmbientLight`, and rendering a massive 10,000-point 3D background starfield.
 - `src/renderer/planetMesh.ts` acts as the generation factory, processing all the physical planet arrays and rendering 8 properly sized spherical geometries using standard materials. It assigns fallback colors gracefully, integrates translucent custom rings onto Saturn, tilts the axial models logically, and maps everything to standard `THREE.Mesh` maps. All 8 planets are statically loaded onto the screen precisely anchored at `t=0` via the physics engine.
 - `src/store/simStore.ts` safely implements our high-performance simulation clock leveraging Zustand. It safely calculates `elapsedDays` over our delta loop natively independent of rendering bottlenecks, driving the entire continuous active re-calculations of planetary velocities and revolution geometries seamlessly.
+- `src/renderer/orbitTrail.ts` iterates over the `getPlanetPosition` output up to 256 unique fixed point markers tracing orbits spanning massive distances exactly simulating Kepler anomalies, generating static closed `THREE.LineLoop` rendering paths universally.
 
 ## Development
 
@@ -35,7 +36,7 @@ npm install
 npm run dev
 ```
 
-You should see a vast background starfield, a glowing sun that subtly pulses via trigonometric animation, and 8 uniquely colored planetary bodies dynamically revolving across the entire plane at their respective physical speeds simulating a continuous live orbit loop. This signifies the rendering environment is entirely prepared to track and visualize spatial trajectory physics in Feature 8: **Orbit Trail Lines**.
+You should see a vast background starfield, a glowing sun that subtly pulses via trigonometric animation, 8 uniquely colored planetary bodies dynamically revolving across the entire plane simulating a continuously active orbit loop, and beautifully glowing elliptical tracks following their every trajectory. This signifies the core environment is completely finished and prepared for satellite geometry rendering inside Feature 9: **Moon System**.
 
 To verify code integrity, build functionality, and type safety, you can additionally run:
 

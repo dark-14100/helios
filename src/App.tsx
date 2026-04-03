@@ -4,6 +4,7 @@ import { useThreeScene } from '@/hooks/useThreeScene'
 import { useAnimationLoop } from '@/hooks/useAnimationLoop'
 import { createSun } from '@/renderer/sunGlow'
 import { createAllPlanetMeshes } from '@/renderer/planetMesh'
+import { createAllOrbitTrails } from '@/renderer/orbitTrail'
 import { planets } from '@/data/planets'
 import { getPlanetPosition } from '@/simulation/keplerEngine'
 import { useSimStore } from '@/store/simStore'
@@ -34,6 +35,9 @@ export default function App() {
         mesh.position.set(coords.x, coords.y, coords.z)
       }
     })
+    
+    // Feature 8: Draw static orbital trails permanently into the space environment
+    createAllOrbitTrails(planets, sceneObjects.scene)
   }, [sceneObjects])
 
   useAnimationLoop((delta) => {

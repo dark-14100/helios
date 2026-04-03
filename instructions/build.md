@@ -2,29 +2,7 @@
 
 
 
-## F8 — Orbit Trail Lines
 
-```
-You are about to implement Feature 8 (Orbit Trail Lines) of the Helios 3D Solar System Simulator.
-
-You have been provided with:
-- features.md — read the F8 section carefully AND keep the full feature list in mind — trails are static geometry, make sure they don't interfere with the animation loop from F7
-- f8_prd.md — the full spec for this feature
-- f8_system_prompt.md — your implementation instructions
-
-Before doing anything:
-1. Read all three documents thoroughly
-2. Ask me if I have any concerns or gaps — do not generate any files, code, or output until I respond
-3. After I confirm, propose a numbered phase breakdown for implementing this feature
-4. Wait for my explicit approval of the phases before starting Phase 1
-5. After each phase completes, stop and ask me to confirm before moving to the next
-6. Never proceed to the next phase without my go-ahead
-7. Documentation must be the final phase — do not skip it or merge it with implementation
-
-Do not generate anything yet. Start by asking me about concerns or gaps you have.
-```
-
----
 
 ## F9 — Moon System
 
